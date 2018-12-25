@@ -15,6 +15,7 @@ export default createBottomTabNavigator(
     我的: UserStack
   },
   {
+    initialRouteName: '我的',
     defaultNavigationOptions: ({ navigation }) => ({
       // eslint-disable-next-line react/display-name
       tabBarIcon: ({ focused, tintColor }) => {

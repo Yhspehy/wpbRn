@@ -1,12 +1,14 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import Ionicons from 'react-native-vector-icons/AntDesign'
 
 import { StyleSheet, View, Text, TouchableHighlight, Alert } from 'react-native'
 import { SafeAreaView } from 'react-navigation'
+import Row from './Row'
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
     title: '我的账户',
+    headerBackTitle: null,
     headerStyle: {
       backgroundColor: '#d42b2e'
     },
@@ -25,44 +27,27 @@ export default class HomeScreen extends React.Component {
   }
 
   render() {
-    function Row(props) {
-      return (
-        <Fragment>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Ionicons
-              style={{ width: 25, marginRight: 10 }}
-              name={props.iconName}
-              size={25}
-              color={props.iconColor}
-            />
-            <Text style={{ color: '#000', fontSize: props.fontSize || 20 }}>
-              {props.text}
-            </Text>
-          </View>
-          <Ionicons
-            style={{ width: 20 }}
-            name="right"
-            size={20}
-            color="#adadad"
-            onPress={() => {
-              Alert.alert('你点击了跳转！')
-            }}
-          />
-        </Fragment>
-      )
-    }
-
     const User = (
       <View style={styles.userInfo}>
-        <Row iconName="user" iconColor="#adadad" text="lipei" />
+        <Row
+          iconName="user"
+          iconColor="#adadad"
+          text="lipei"
+          navigation={() => this.props.navigation.push('UserInfo')}
+        />
       </View>
     )
 
     const Money = (
       <View style={styles.money}>
-        <Text style={{ marginBottom: 10 }}>账户余额</Text>
-        <Text style={{ marginBottom: 10 }}>45.00元</Text>
-        <Text style={{ marginBottom: 10 }}>（抵用卷：45元）</Text>
+        <Text style={{ marginBottom: 10, fontSize: 15 }}>账户余额</Text>
+        <Text style={{ marginBottom: 10 }}>
+          <Text style={{ color: '#d42b2e', fontSize: 18 }}>45.00 </Text>
+          <Text style={{ color: '#7a7a7a', fontSize: 12 }}>元</Text>
+        </Text>
+        <Text style={{ marginBottom: 10, color: '#7a7a7a', fontSize: 12 }}>
+          （抵用卷：<Text style={{ color: '#d42b2e' }}>45</Text>元）
+        </Text>
         <View style={styles.Row}>
           <View style={[styles.Row, { flex: 1 }]}>
             <TouchableHighlight
@@ -100,6 +85,8 @@ export default class HomeScreen extends React.Component {
             iconColor="#fa8562"
             text="资金明细"
             fontSize={16}
+            route="UserInfo"
+            navigation={() => this.props.navigation.push('UserInfo')}
           />
         </View>
         <View style={styles.listItem}>
@@ -108,6 +95,7 @@ export default class HomeScreen extends React.Component {
             iconColor="#fa8562"
             text="账户设置"
             fontSize={16}
+            navigation={() => this.props.navigation.push('UserInfo')}
           />
         </View>
         <View style={styles.listItem}>
@@ -116,6 +104,7 @@ export default class HomeScreen extends React.Component {
             iconColor="#f39943"
             text="推广赚钱"
             fontSize={16}
+            navigation={() => this.props.navigation.push('UserInfo')}
           />
         </View>
         <View style={styles.listItem}>
@@ -124,6 +113,7 @@ export default class HomeScreen extends React.Component {
             iconColor="#27bc9c"
             text="申请投资人"
             fontSize={16}
+            navigation={() => this.props.navigation.push('UserInfo')}
           />
         </View>
       </View>
