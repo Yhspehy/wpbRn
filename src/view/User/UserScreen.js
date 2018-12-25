@@ -3,7 +3,7 @@ import Ionicons from 'react-native-vector-icons/AntDesign'
 
 import { StyleSheet, View, Text, TouchableHighlight, Alert } from 'react-native'
 import { SafeAreaView } from 'react-navigation'
-import Row from './Row'
+import Row from './components/Row'
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -86,7 +86,7 @@ export default class HomeScreen extends React.Component {
             text="资金明细"
             fontSize={16}
             route="UserInfo"
-            navigation={() => this.props.navigation.push('UserInfo')}
+            navigation={() => this.props.navigation.push('FundDetail')}
           />
         </View>
         <View style={styles.listItem}>

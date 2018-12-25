@@ -10,6 +10,7 @@ const Row = memo(
     text,
     navigation,
     rightText,
+    rightTextColor,
     disableIcon
   }) => (
     <Fragment>
@@ -23,12 +24,16 @@ const Row = memo(
         <Text style={{ color: '#000', fontSize: fontSize || 20 }}>{text}</Text>
       </View>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        {rightText && <Text>{rightText}</Text>}
+        {rightText && (
+          <Text style={{ color: rightTextColor || '#adadad' }}>
+            {rightText}
+          </Text>
+        )}
         {!disableIcon && (
           <Ionicons
-            style={{ width: 20, marginTop: 2 }}
+            style={{ width: 18, marginTop: 1 }}
             name="right"
-            size={20}
+            size={18}
             color="#adadad"
             onPress={() => navigation()}
           />

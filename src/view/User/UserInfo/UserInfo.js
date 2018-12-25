@@ -1,26 +1,35 @@
 import React from 'react'
 
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, Text } from 'react-native'
 import { SafeAreaView } from 'react-navigation'
-import Row from './Row'
+import { Bar } from 'react-native-progress'
+import Row from '../components/Row'
 
-export default class HomeScreen extends React.Component {
+export default class UserInfoPage extends React.Component {
   static navigationOptions = {
     title: '个人信息',
+    headerBackTitle: null,
     headerStyle: {
       backgroundColor: '#d42b2e'
     },
     headerTintColor: '#fff'
   }
 
-  constructor(props) {
-    super(props)
-    this.navigation = props.navigation
-  }
-
   render() {
     return (
       <SafeAreaView style={styles.container}>
+        <View style={styles.safeLevel}>
+          <Text>安全级别</Text>
+          <Bar
+            style={{ marginLeft: 10 }}
+            progress={0.4}
+            width={80}
+            height={10}
+            borderRadius={5}
+            color="#d42b2e"
+            unfilledColor="f1f2f3"
+          />
+        </View>
         <View>
           <View style={styles.listItem}>
             <Row
@@ -30,7 +39,8 @@ export default class HomeScreen extends React.Component {
               fontSize={16}
               route="UserInfo"
               rightText="未实名认证"
-              navigation={() => this.props.navigation.push('UserInfo')}
+              rightTextColor="#ff8726"
+              navigation={() => this.props.navigation.push('Verify')}
             />
           </View>
           <View style={styles.listItem}>
@@ -39,6 +49,7 @@ export default class HomeScreen extends React.Component {
               iconColor="#fa8562"
               text="提款银行卡"
               rightText="未绑定"
+              rightTextColor="#ff8726"
               fontSize={16}
               navigation={() => this.props.navigation.push('UserInfo')}
             />
@@ -61,7 +72,7 @@ export default class HomeScreen extends React.Component {
               text="登录密码"
               rightText="已设置"
               fontSize={16}
-              navigation={() => this.props.navigation.push('UserInfo')}
+              navigation={() => this.props.navigation.push('Password')}
             />
           </View>
         </View>
@@ -73,8 +84,15 @@ export default class HomeScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#f1f2f3',
-    paddingTop: 10,
     flex: 1
+  },
+  safeLevel: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff',
+    padding: 20,
+    marginBottom: 10
   },
   details: {
     marginTop: 10,
