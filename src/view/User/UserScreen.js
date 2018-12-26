@@ -104,7 +104,7 @@ export default class HomeScreen extends React.Component {
             iconColor="#f39943"
             text="推广赚钱"
             fontSize={16}
-            navigation={() => this.props.navigation.push('UserInfo')}
+            navigation={() => this.props.navigation.push('Promotion')}
           />
         </View>
         <View style={styles.listItem}>
@@ -113,7 +113,7 @@ export default class HomeScreen extends React.Component {
             iconColor="#27bc9c"
             text="申请投资人"
             fontSize={16}
-            navigation={() => this.props.navigation.push('UserInfo')}
+            navigation={() => this.props.navigation.push('Invest')}
           />
         </View>
       </View>
