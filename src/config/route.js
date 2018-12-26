@@ -10,12 +10,12 @@ import UserStack from '../view/User/index'
 export default createBottomTabNavigator(
   {
     首页: HomeStack,
-    资讯: NewsStack,
     交易: TradeStack,
+    资讯: NewsStack,
     我的: UserStack
   },
   {
-    initialRouteName: '我的',
+    initialRouteName: '资讯',
     defaultNavigationOptions: ({ navigation }) => ({
       // eslint-disable-next-line react/display-name
       tabBarIcon: ({ focused, tintColor }) => {
