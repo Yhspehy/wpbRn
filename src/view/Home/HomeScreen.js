@@ -1,14 +1,12 @@
 import React from 'react'
-// import Ionicons from 'react-native-vector-icons/FontAwesome5'
 import LinearGradient from 'react-native-linear-gradient'
 
 import {
   StyleSheet,
-  ScrollView,
+  Animated,
   Text,
   View,
   FlatList,
-  Image,
   TouchableOpacity,
   Dimensions
 } from 'react-native'
@@ -22,7 +20,8 @@ export default class HomeScreen extends React.Component {
   }
 
   state = {
-    data: []
+    data: [],
+    scrollY: new Animated.Value(0)
   }
 
   componentDidMount() {
@@ -33,7 +32,8 @@ export default class HomeScreen extends React.Component {
       .then(response => response.json())
       .then(res => {
         this.setState({
-          data: res.data
+          data: res.data,
+          scrollY: new Animated.Value(0)
         })
       })
   }
@@ -56,83 +56,140 @@ export default class HomeScreen extends React.Component {
       <Text style={{ fontSize: 10, color: '#999999' }}>{subTitle}</Text>
     </View>
   )
-
+  _handleScroll(e) {
+    // console.log(e.nativeEvent.contentOffset.y, "jvjhvhm");
+  }
   render() {
+    var headMov = this.state.scrollY.interpolate({
+      inputRange: [0, 120, 121],
+      outputRange: [0, -120, -120]
+    })
+
+    var headColor = this.state.scrollY.interpolate({
+      inputRange: [0, 100],
+      outputRange: ['transparent', 'white']
+    })
+
+    var headIndex = this.state.scrollY.interpolate({
+      inputRange: [0, 120, 121],
+      outputRange: [1, 1, 3]
+    })
+
+    var imgOp = this.state.scrollY.interpolate({
+      inputRange: [0, 120, 121],
+      outputRange: [1, 0.3, 0.3]
+    })
     return (
-      <ScrollView style={styles.container}>
-        <Image
-          source={require('./img/banner.png')}
-          resizeMode="contain"
-          style={{
-            width: Dimensions.get('window').width,
-            height: Dimensions.get('window').width * 0.562
+      <View style={styles.container}>
+        <Animated.ScrollView
+          scrollEventThrottle={16}
+          style={{ zIndex: 2 }}
+          contentContainerStyle={{
+            paddingTop: 200
           }}
-        />
+          onScroll={Animated.event(
+            [
+              {
+                nativeEvent: { contentOffset: { y: this.state.scrollY } }
+              }
+            ],
+            { listener: this._handleScroll.bind(this) },
+            {
+              useNativeDriver: true
+            }
+          )}
+        >
+          <Commodity />
 
-        <Commodity />
+          <Text style={styles.risk}>期货风险提示</Text>
 
-        <Text style={styles.risk}>期货风险提示</Text>
+          <View style={styles.tutorial}>
+            {this._renderTitle('新手教程', '百分百红包让你领')}
 
-        <View style={styles.tutorial}>
-          {this._renderTitle('新手教程', '百分百红包让你领')}
-
-          <View style={styles.enjoy}>
-            <View>
-              <Text style={{ color: '#ff4c4c', fontSize: 20, marginBottom: 5 }}>
-                10.00%<Text style={{ fontSize: 13 }}>+1.50%</Text>
-              </Text>
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Text style={{ color: '#999999', fontSize: 10 }}>
-                  近3月年化收益率
+            <View style={styles.enjoy}>
+              <View>
+                <Text
+                  style={{ color: '#ff4c4c', fontSize: 20, marginBottom: 5 }}
+                >
+                  10.00%<Text style={{ fontSize: 13 }}>+1.50%</Text>
                 </Text>
-                <View style={styles.exclusive}>
-                  <Text
-                    style={{
-                      fontSize: 10,
-                      color: '#2994e6',
-                      lineHeight: 14
-                    }}
-                  >
-                    新人专享
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Text style={{ color: '#999999', fontSize: 10 }}>
+                    近3月年化收益率
                   </Text>
+                  <View style={styles.exclusive}>
+                    <Text
+                      style={{
+                        fontSize: 10,
+                        color: '#2994e6',
+                        lineHeight: 14
+                      }}
+                    >
+                      新人专享
+                    </Text>
+                  </View>
                 </View>
               </View>
-            </View>
-            <TouchableOpacity
-              style={{ justifyContent: 'center' }}
-              onPress={() => this.props.navigation.navigate('Verify')}
-            >
-              <LinearGradient
-                useAngle={true}
-                angle={20}
-                colors={['#6876ff', '#22b6ff']}
-                style={styles.linearGradient}
+              <TouchableOpacity
+                style={{ justifyContent: 'center' }}
+                onPress={() => this.props.navigation.navigate('Verify')}
               >
-                <Text
-                  style={{
-                    color: '#fff',
-                    fontSize: 12
-                  }}
+                <LinearGradient
+                  useAngle={true}
+                  angle={20}
+                  colors={['#6876ff', '#22b6ff']}
+                  style={styles.linearGradient}
                 >
-                  立即享受
-                </Text>
-              </LinearGradient>
-            </TouchableOpacity>
+                  <Text
+                    style={{
+                      color: '#fff',
+                      fontSize: 12
+                    }}
+                  >
+                    立即享受
+                  </Text>
+                </LinearGradient>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
 
-        <View style={styles.tutorial}>
-          {this._renderTitle('热门咨询', '提供最新热门新闻')}
+          <View style={styles.tutorial}>
+            {this._renderTitle('热门咨询', '提供最新热门新闻')}
 
-          <FlatList
-            data={this.state.data}
-            renderItem={({ item }) => (
-              <NewItem item={item} navigation={this.props.navigation} />
-            )}
-            keyExtractor={item => item.id + ''}
+            <FlatList
+              data={this.state.data}
+              renderItem={({ item }) => (
+                <NewItem item={item} navigation={this.props.navigation} />
+              )}
+              keyExtractor={item => item.id + ''}
+            />
+          </View>
+        </Animated.ScrollView>
+
+        <Animated.View
+          style={{
+            position: 'absolute',
+            height: Dimensions.get('window').width * 0.562,
+            width: Dimensions.get('window').width,
+            top: 0,
+            zIndex: headIndex,
+            backgroundColor: headColor,
+            justifyContent: 'flex-end',
+            flexDirection: 'column',
+            transform: [{ translateY: headMov }]
+          }}
+        >
+          <Animated.Image
+            source={require('./img/banner.png')}
+            resizeMode="contain"
+            style={{
+              width: Dimensions.get('window').width,
+              height: Dimensions.get('window').width * 0.562,
+              opacity: imgOp
+            }}
           />
-        </View>
-      </ScrollView>
+        </Animated.View>
+      </View>
     )
   }
 }
