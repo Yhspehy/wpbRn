@@ -2,12 +2,12 @@ import React from 'react' // eslint-disable-line no-unused-vars
 import { createStackNavigator } from 'react-navigation'
 
 import NewsScreen from './NewsScreen'
-import NewsDetailScreen from './NewsDetail'
+// import NewsDetailScreen from './NewsDetail'
 
 const NewsStack = createStackNavigator(
   {
-    News: NewsScreen,
-    NewsDetail: NewsDetailScreen
+    News: NewsScreen
+    // NewsDetail: NewsDetailScreen
   },
   {
     initialRouteName: 'News'

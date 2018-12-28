@@ -1,15 +1,16 @@
 import React from 'react'
+
 import { Text, WebView } from 'react-native'
 import { SafeAreaView } from 'react-navigation'
 
 export default class HomeScreen extends React.Component {
-  static navigationOptions = {
+  static navigationOptions = ({ navigation }) => ({
     title: '详情',
     headerStyle: {
       backgroundColor: '#d42b2e'
     },
     headerTintColor: '#fff'
-  }
+  })
 
   state = {
     data: {}
