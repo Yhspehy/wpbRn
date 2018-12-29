@@ -14,6 +14,8 @@ import {
 import Commodity from './Commodity'
 import NewItem from '../News/NewItem'
 
+import { getStatusBarHeight } from '../../utils/getStatusHeight'
+
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null
@@ -65,19 +67,14 @@ export default class HomeScreen extends React.Component {
       outputRange: [0, -120, -120]
     })
 
-    var headColor = this.state.scrollY.interpolate({
-      inputRange: [0, 100],
-      outputRange: ['transparent', 'white']
-    })
-
-    var headIndex = this.state.scrollY.interpolate({
-      inputRange: [0, 120, 121],
-      outputRange: [1, 1, 3]
-    })
-
     var imgOp = this.state.scrollY.interpolate({
       inputRange: [0, 120, 121],
       outputRange: [1, 0.3, 0.3]
+    })
+
+    var headOp = this.state.scrollY.interpolate({
+      inputRange: [0, 120, 121],
+      outputRange: [0, 1, 1]
     })
     return (
       <View style={styles.container}>
@@ -169,11 +166,48 @@ export default class HomeScreen extends React.Component {
         <Animated.View
           style={{
             position: 'absolute',
+            height: getStatusBarHeight() + 25,
+            width: Dimensions.get('window').width,
+            top: 0,
+            zIndex: 3,
+            opacity: headOp,
+            backgroundColor: '#00ADFF'
+          }}
+        >
+          <LinearGradient colors={['#6876ff', '#22b6ff']} style={{ flex: 1 }}>
+            <TouchableOpacity
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                position: 'absolute',
+                bottom: 7,
+                left: 20,
+                backgroundColor: '#fff',
+                height: 20,
+                width: 43,
+                borderRadius: 10
+              }}
+              onPress={() => this.props.navigation.navigate('Verify')}
+            >
+              <Text
+                style={{
+                  color: '#2994e6',
+                  fontSize: 13
+                }}
+              >
+                客服
+              </Text>
+            </TouchableOpacity>
+          </LinearGradient>
+        </Animated.View>
+
+        <Animated.View
+          style={{
+            position: 'absolute',
             height: Dimensions.get('window').width * 0.562,
             width: Dimensions.get('window').width,
             top: 0,
-            zIndex: headIndex,
-            backgroundColor: headColor,
+            zIndex: 1,
             justifyContent: 'flex-end',
             flexDirection: 'column',
             transform: [{ translateY: headMov }]
