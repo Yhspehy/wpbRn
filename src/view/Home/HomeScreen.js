@@ -166,6 +166,36 @@ export default class HomeScreen extends React.Component {
         <Animated.View
           style={{
             position: 'absolute',
+            top: getStatusBarHeight() - 5,
+            left: 15,
+            zIndex: 5
+          }}
+        >
+          <TouchableOpacity
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: '#fff',
+              height: 20,
+              width: 43,
+              borderRadius: 10
+            }}
+            onPress={() => this.props.navigation.navigate('Verify')}
+          >
+            <Text
+              style={{
+                color: '#2994e6',
+                fontSize: 13
+              }}
+            >
+              客服
+            </Text>
+          </TouchableOpacity>
+        </Animated.View>
+
+        <Animated.View
+          style={{
+            position: 'absolute',
             height: getStatusBarHeight() + 25,
             width: Dimensions.get('window').width,
             top: 0,
@@ -174,31 +204,7 @@ export default class HomeScreen extends React.Component {
             backgroundColor: '#00ADFF'
           }}
         >
-          <LinearGradient colors={['#6876ff', '#22b6ff']} style={{ flex: 1 }}>
-            <TouchableOpacity
-              style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                position: 'absolute',
-                bottom: 7,
-                left: 20,
-                backgroundColor: '#fff',
-                height: 20,
-                width: 43,
-                borderRadius: 10
-              }}
-              onPress={() => this.props.navigation.navigate('Verify')}
-            >
-              <Text
-                style={{
-                  color: '#2994e6',
-                  fontSize: 13
-                }}
-              >
-                客服
-              </Text>
-            </TouchableOpacity>
-          </LinearGradient>
+          <LinearGradient colors={['#6876ff', '#22b6ff']} style={{ flex: 1 }} />
         </Animated.View>
 
         <Animated.View
