@@ -20,7 +20,7 @@ const tab = createBottomTabNavigator(
     我的: UserStack
   },
   {
-    initialRouteName: '首页',
+    initialRouteName: '交易',
     defaultNavigationOptions: ({ navigation }) => ({
       // eslint-disable-next-line react/display-name
       tabBarIcon: ({ focused, tintColor }) => {
@@ -30,11 +30,11 @@ const tab = createBottomTabNavigator(
           case '首页':
             iconName = 'ios-home'
             break
-          case '资讯':
-            iconName = 'ios-analytics'
-            break
           case '交易':
             iconName = 'ios-appstore'
+            break
+          case '资讯':
+            iconName = 'ios-analytics'
             break
           case '我的':
             iconName = 'ios-person'
