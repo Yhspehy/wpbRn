@@ -5,6 +5,9 @@ import { StyleSheet, Text, View, ScrollView, SafeAreaView } from 'react-native'
 import RNPickerSelect from 'react-native-picker-select'
 
 import BuyFooter from './components/BuyFooter'
+import Echarts from 'native-echarts'
+
+import Chart from './components/Chart'
 
 export default class Buy extends React.Component {
   state = {
@@ -72,6 +75,28 @@ export default class Buy extends React.Component {
   )
 
   render() {
+    const option = {
+      title: {
+        text: 'ECharts demo'
+      },
+      tooltip: {},
+      legend: {
+        data: ['销量']
+      },
+      xAxis: {
+        data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
+      },
+      yAxis: {
+        show: false
+      },
+      series: [
+        {
+          name: '销量',
+          type: 'bar',
+          data: [5, 20, 36, 10, 10, 20]
+        }
+      ]
+    }
     return (
       <SafeAreaView style={styles.container}>
         <ScrollView>
@@ -117,6 +142,10 @@ export default class Buy extends React.Component {
             {this._renderDayItem('lightning', '闪电')}
             {this._renderDayItem('handicap', '盘口')}
           </View>
+
+          <Echarts option={option} height={300} />
+
+          <Chart />
 
           <BuyFooter data={10} />
         </ScrollView>

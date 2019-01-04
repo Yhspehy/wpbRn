@@ -10,6 +10,8 @@ import NewsStack from '../view/News/index'
 import TradeStack from '../view/Trade/index'
 import UserStack from '../view/User/index'
 
+import LoginScreen from '../view/Auth/Login'
+import RegisterScreen from '../view/Auth/Register'
 import NewsDetailScreen from '../view/News/NewsDetail'
 
 const tab = createBottomTabNavigator(
@@ -48,6 +50,8 @@ const tab = createBottomTabNavigator(
 )
 export default createStackNavigator(
   {
+    Login: LoginScreen,
+    Register: RegisterScreen,
     NewsDetail: NewsDetailScreen,
     Tab: {
       screen: tab,
@@ -58,6 +62,6 @@ export default createStackNavigator(
     }
   },
   {
-    initialRouteName: 'Tab'
+    initialRouteName: 'Register'
   }
 )
