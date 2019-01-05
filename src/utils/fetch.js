@@ -2,7 +2,7 @@ import { AsyncStorage } from 'react-native'
 
 export default async function Fetch(url, options, fullUrl) {
   const token = (await AsyncStorage.getItem('token')) || ''
-  const baseUrl = 'http://api.waipan8.com'
+  // const baseUrl = 'http://api.waipan8.com'
   const finalUrl = fullUrl ? fullUrl : baseUrl + url
   const defaultOptioins = {
     method: 'GET',
@@ -21,3 +21,5 @@ export default async function Fetch(url, options, fullUrl) {
     return response.json()
   })
 }
+
+export var baseUrl = 'http://api.waipan8.com'

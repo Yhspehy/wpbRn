@@ -6,11 +6,12 @@ import {
   Text,
   TextInput,
   TouchableHighlight,
-  Alert
+  TouchableWithoutFeedback
 } from 'react-native'
 import { SafeAreaView } from 'react-navigation'
 
-export default class Verify extends React.Component {
+import MsgCodeModal from './MsgCodeModal'
+export default class Register extends React.Component {
   static navigationOptions = {
     title: '免费注册',
     headerBackTitle: null,
@@ -23,9 +24,52 @@ export default class Verify extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      name: '',
-      idCard: ''
+      mobile: '',
+      msgCode: '',
+      modalVisible: false,
+      btnDisabled: false,
+      msgCodeText: '获取验证码',
+      msgCodeSecond: 10
     }
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timeMsgCode)
+  }
+
+  setModalVisible(visible, btnDisabled) {
+    if (!this.state.btnDisabled) {
+      if (!btnDisabled) {
+        this.setState({ modalVisible: visible })
+      } else {
+        this.setState({
+          modalVisible: visible,
+          btnDisabled: true
+        })
+        this.tick()
+      }
+    }
+  }
+
+  tick = () => {
+    this.setState({
+      msgCodeText: `${this.state.msgCodeSecond}s后重新发送`
+    })
+    this.timeMsgCode = setInterval(() => {
+      if (this.state.msgCodeSecond === 1) {
+        clearInterval(this.timeMsgCode)
+        this.setState({
+          msgCodeSecond: 10,
+          msgCodeText: '获取验证码',
+          btnDisabled: false
+        })
+        return false
+      }
+      this.setState((prevState, props) => ({
+        msgCodeSecond: prevState.msgCodeSecond - 1,
+        msgCodeText: `${prevState.msgCodeSecond - 1}s后重新发送`
+      }))
+    }, 1000)
   }
 
   render() {
@@ -36,8 +80,8 @@ export default class Verify extends React.Component {
           <TextInput
             style={styles.input}
             placeholder="请输入手机号码"
-            onChangeText={text => this.setState({ name: text })}
-            value={this.state.name}
+            onChangeText={text => this.setState({ mobile: text })}
+            value={this.state.mobile}
             underlineColorAndroid="transparent"
           />
         </View>
@@ -46,30 +90,38 @@ export default class Verify extends React.Component {
           <TextInput
             style={styles.input}
             placeholder="请输入验证码"
-            onChangeText={text => this.setState({ idCard: text })}
-            value={this.state.idCard}
+            onChangeText={text => this.setState({ msgCode: text })}
+            value={this.state.msgCode}
+            textContentType="oneTimeCode"
             underlineColorAndroid="transparent"
           />
 
-          <TouchableHighlight
+          <TouchableWithoutFeedback
             onPress={() => {
-              Alert.alert('你点击了验证码！')
+              this.setModalVisible(true)
             }}
-            style={[
-              styles.btn,
-              {
-                height: 30,
-                backgroundColor: '#fff',
-                borderColor: '#d42b2e',
-                paddingLeft: 20,
-                paddingRight: 20
-              }
-            ]}
+            disabled={this.state.btnDisabled}
           >
-            <Text style={{ color: '#d42b2e', fontSize: 12, fontWeight: '500' }}>
-              获取验证码
+            <Text
+              style={[
+                styles.btn,
+                {
+                  color: this.state.btnDisabled ? '#fff' : '#d42b2e',
+                  fontSize: 12,
+                  height: 30,
+                  lineHeight: 28,
+                  backgroundColor: this.state.btnDisabled ? '#b6b6b6' : '#fff',
+                  borderColor: this.state.btnDisabled
+                    ? 'transparent'
+                    : '#d42b2e',
+                  paddingLeft: 10,
+                  paddingRight: 10
+                }
+              ]}
+            >
+              {this.state.msgCodeText}
             </Text>
-          </TouchableHighlight>
+          </TouchableWithoutFeedback>
         </View>
 
         <TouchableHighlight
@@ -96,6 +148,14 @@ export default class Verify extends React.Component {
             如收不到验证码，请<Text style={{ color: '#249fed' }}>联系客服</Text>
           </Text>
         </View>
+
+        {/* MsgCodeModal */}
+        <MsgCodeModal
+          modalVisible={this.state.modalVisible}
+          setModalVisible={(visible, btnDisabled) =>
+            this.setModalVisible(visible, btnDisabled)
+          }
+        />
       </SafeAreaView>
     )
   }
