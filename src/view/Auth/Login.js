@@ -15,7 +15,8 @@ import { SafeAreaView } from 'react-navigation'
 
 export default class Verify extends React.Component {
   static navigationOptions = {
-    header: null
+    header: null,
+    headerBackTitle: null
   }
 
   constructor(props) {
@@ -95,6 +96,30 @@ export default class Verify extends React.Component {
           >
             <Text style={{ color: '#fff', fontSize: 16, fontWeight: '500' }}>
               登录
+            </Text>
+          </TouchableHighlight>
+
+          <TouchableHighlight
+            onPress={() => {
+              this.props.navigation.navigate('Register')
+            }}
+            style={[
+              styles.btn,
+              {
+                height: 40,
+                backgroundColor: 'transparent',
+                borderColor: 'rgba(255,255,255,0.6)'
+              }
+            ]}
+          >
+            <Text
+              style={{
+                color: 'rgba(255,255,255,0.6)',
+                fontSize: 16,
+                fontWeight: '500'
+              }}
+            >
+              免费注册
             </Text>
           </TouchableHighlight>
 

@@ -180,7 +180,7 @@ export default class HomeScreen extends React.Component {
               width: 43,
               borderRadius: 10
             }}
-            onPress={() => this.props.navigation.navigate('Verify')}
+            onPress={() => this.props.navigation.navigate('Login')}
           >
             <Text
               style={{

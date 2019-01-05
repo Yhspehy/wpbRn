@@ -5,15 +5,13 @@ import {
   View,
   Text,
   TextInput,
-  TouchableHighlight,
-  Alert
+  TouchableHighlight
 } from 'react-native'
-import { SafeAreaView } from 'react-navigation'
+import { StackActions, NavigationActions, SafeAreaView } from 'react-navigation'
 
 export default class Verify extends React.Component {
   static navigationOptions = {
     title: '免费注册',
-    headerBackTitle: null,
     headerStyle: {
       backgroundColor: '#d42b2e'
     },
@@ -29,52 +27,46 @@ export default class Verify extends React.Component {
   }
 
   render() {
+    const resetAction = StackActions.reset({
+      index: 0,
+      actions: [NavigationActions.navigate({ routeName: 'Login' })]
+    })
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.row}>
-          <Text style={styles.leftText}>手机号码</Text>
+          <Text style={styles.leftText}>昵称</Text>
           <TextInput
             style={styles.input}
-            placeholder="请输入手机号码"
+            placeholder="请输入昵称"
             onChangeText={text => this.setState({ name: text })}
             value={this.state.name}
             underlineColorAndroid="transparent"
           />
         </View>
         <View style={styles.row}>
-          <Text style={styles.leftText}>短信验证码</Text>
+          <Text style={styles.leftText}>登录密码</Text>
           <TextInput
             style={styles.input}
-            placeholder="请输入验证码"
+            placeholder="请输入登录密码"
             onChangeText={text => this.setState({ idCard: text })}
             value={this.state.idCard}
             underlineColorAndroid="transparent"
           />
-
-          <TouchableHighlight
-            onPress={() => {
-              Alert.alert('你点击了验证码！')
-            }}
-            style={[
-              styles.btn,
-              {
-                height: 30,
-                backgroundColor: '#fff',
-                borderColor: '#d42b2e',
-                paddingLeft: 20,
-                paddingRight: 20
-              }
-            ]}
-          >
-            <Text style={{ color: '#d42b2e', fontSize: 12, fontWeight: '500' }}>
-              获取验证码
-            </Text>
-          </TouchableHighlight>
+        </View>
+        <View style={styles.row}>
+          <Text style={styles.leftText}>确认密码</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="请确认您的登录密码"
+            onChangeText={text => this.setState({ idCard: text })}
+            value={this.state.idCard}
+            underlineColorAndroid="transparent"
+          />
         </View>
 
         <TouchableHighlight
           onPress={() => {
-            this.props.navigation.navigate('RegisterComfirm')
+            this.props.navigation.dispatch(resetAction)
           }}
           style={[
             styles.btn,
@@ -87,15 +79,9 @@ export default class Verify extends React.Component {
           ]}
         >
           <Text style={{ color: '#fff', fontSize: 16, fontWeight: '500' }}>
-            下一步
+            立即注册
           </Text>
         </TouchableHighlight>
-
-        <View style={{ marginTop: 20, alignItems: 'center' }}>
-          <Text style={{ color: '#7a7a7a' }}>
-            如收不到验证码，请<Text style={{ color: '#249fed' }}>联系客服</Text>
-          </Text>
-        </View>
       </SafeAreaView>
     )
   }
@@ -111,7 +97,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#fff',
-    padding: 10,
+    paddingRight: 10,
+    paddingLeft: 10,
+    paddingBottom: 6,
+    paddingTop: 6,
     borderBottomWidth: 0.5,
     borderBottomColor: '#f1f2f3',
     borderStyle: 'solid'

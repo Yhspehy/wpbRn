@@ -12,6 +12,8 @@ import UserStack from '../view/User/index'
 
 import LoginScreen from '../view/Auth/Login'
 import RegisterScreen from '../view/Auth/Register'
+import RegisterComfirmScreen from '../view/Auth/RegisterComfirm'
+
 import NewsDetailScreen from '../view/News/NewsDetail'
 
 const tab = createBottomTabNavigator(
@@ -22,7 +24,7 @@ const tab = createBottomTabNavigator(
     我的: UserStack
   },
   {
-    initialRouteName: '交易',
+    initialRouteName: '首页',
     defaultNavigationOptions: ({ navigation }) => ({
       // eslint-disable-next-line react/display-name
       tabBarIcon: ({ focused, tintColor }) => {
@@ -52,6 +54,7 @@ export default createStackNavigator(
   {
     Login: LoginScreen,
     Register: RegisterScreen,
+    RegisterComfirm: RegisterComfirmScreen,
     NewsDetail: NewsDetailScreen,
     Tab: {
       screen: tab,
@@ -62,6 +65,6 @@ export default createStackNavigator(
     }
   },
   {
-    initialRouteName: 'Register'
+    initialRouteName: 'Tab'
   }
 )
