@@ -65,6 +65,6 @@ export default createStackNavigator(
     }
   },
   {
-    initialRouteName: 'Tab'
+    initialRouteName: 'Login'
   }
 )

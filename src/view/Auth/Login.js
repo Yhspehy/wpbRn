@@ -6,13 +6,14 @@ import {
   Text,
   TextInput,
   TouchableHighlight,
-  Alert,
   Image,
   ImageBackground,
-  Dimensions
+  Dimensions,
+  Platform
 } from 'react-native'
-import { SafeAreaView } from 'react-navigation'
+import { SafeAreaView, StackActions, NavigationActions } from 'react-navigation'
 
+import { login, setToken, getUser } from '../../utils/user'
 export default class Verify extends React.Component {
   static navigationOptions = {
     header: null,
@@ -22,8 +23,60 @@ export default class Verify extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      name: '',
-      idCard: ''
+      mobile: '',
+      password: '',
+      msg: ''
+    }
+  }
+
+  _validMobile(mobile) {
+    const reg = /^1[0-9]{10}$/
+    if (!reg.test(this.state.mobile)) {
+      this.setState({
+        msg: '请输入手机号'
+      })
+      return false
+    }
+    this.setState({
+      msg: ''
+    })
+    return true
+  }
+
+  _validPassword(pwd) {
+    const reg = new RegExp('^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$', 'g')
+    if (!reg.test(this.state.password)) {
+      this.setState({
+        msg: '请输入密码'
+      })
+      return false
+    }
+    this.setState({
+      msg: ''
+    })
+    return true
+  }
+
+  _login = () => {
+    const ResetLogin = StackActions.reset({
+      index: 0,
+      actions: [NavigationActions.navigate({ routeName: 'Tab' })]
+    })
+    if (this._validMobile() && this._validPassword()) {
+      const platform = Platform.os === 'ios' ? 1 : 2
+      // eslint-disable-next-line no-undef
+      const data = JSON.stringify({
+        mobile: this.state.mobile,
+        pass_word: this.state.password,
+        plat_form: platform,
+        client_id: ''
+      })
+      login(data).then(res => {
+        setToken(res.data)
+        getUser().then(user => {
+          this.props.navigation.dispatch(ResetLogin)
+        })
+      })
     }
   }
 
@@ -57,8 +110,10 @@ export default class Verify extends React.Component {
             <TextInput
               style={styles.input}
               placeholder="请输入手机号"
-              onChangeText={text => this.setState({ name: text })}
-              value={this.state.name}
+              onChangeText={text => this.setState({ mobile: text })}
+              value={this.state.mobile}
+              clearButtonMode="while-editing"
+              textContentType="telephoneNumber"
               underlineColorAndroid="transparent"
             />
           </View>
@@ -75,15 +130,24 @@ export default class Verify extends React.Component {
             <TextInput
               style={styles.input}
               placeholder="请输入密码"
-              onChangeText={text => this.setState({ idCard: text })}
-              value={this.state.idCard}
+              onChangeText={text => this.setState({ password: text })}
+              value={this.state.password}
+              clearButtonMode="while-editing"
+              textContentType="password"
+              secureTextEntry={true}
               underlineColorAndroid="transparent"
             />
           </View>
 
+          {this.state.msg !== '' && (
+            <Text style={{ color: 'red', marginLeft: 40, marginTop: 20 }}>
+              {this.state.msg}
+            </Text>
+          )}
+
           <TouchableHighlight
             onPress={() => {
-              Alert.alert('你点击了登陆！')
+              this._login()
             }}
             style={[
               styles.btn,
@@ -123,10 +187,16 @@ export default class Verify extends React.Component {
             </Text>
           </TouchableHighlight>
 
-          <View style={{ marginTop: 20, alignItems: 'center' }}>
-            <Text style={{ color: '#7a7a7a' }}>
-              如遇到问题，请<Text style={{ color: '#249fed' }}>联系客服</Text>
-            </Text>
+          <View
+            style={{
+              margin: 40,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between'
+            }}
+          >
+            <Text style={{ color: '#249fed' }}>联系客服</Text>
+            <Text style={{ color: '#249fed' }}>忘记密码</Text>
           </View>
         </SafeAreaView>
       </ImageBackground>
@@ -159,7 +229,7 @@ const styles = StyleSheet.create({
   input: {
     padding: 0,
     height: 40,
-    width: 140
+    flex: 1
   },
   btn: {
     marginTop: 20,
