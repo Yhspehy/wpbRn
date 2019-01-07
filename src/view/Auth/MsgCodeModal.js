@@ -15,7 +15,6 @@ import { baseUrl } from '../../utils/fetch'
 
 export default class MsgCodeModal extends React.Component {
   state = {
-    sign: '',
     imgCode: '',
     inputImgCode: '',
     warnMsg: ''
@@ -28,8 +27,7 @@ export default class MsgCodeModal extends React.Component {
   _getImgCode = () => {
     getImgCode().then(res => {
       this.setState({
-        sign: res.data,
-        imgCode: baseUrl + '/ValidationImage/GetAloImage?sign=' + res.data
+        imgCode: res.data
       })
     })
   }
@@ -42,7 +40,7 @@ export default class MsgCodeModal extends React.Component {
       return false
     }
     const data = JSON.stringify({
-      mobile: 12121212111,
+      mobile: 12124212111,
       sign: this.state.imgCode,
       img_code: this.state.inputImgCode,
       type: 1
@@ -52,6 +50,7 @@ export default class MsgCodeModal extends React.Component {
         this.setState({
           warnMsg: res.msg
         })
+        this._getImgCode()
         return false
       }
       this.props.setModalVisible(false, true)
@@ -100,7 +99,9 @@ export default class MsgCodeModal extends React.Component {
             >
               <Image
                 source={{
-                  url: this.state.imgCode
+                  url: `${baseUrl}/ValidationImage/GetAloImage?sign=${
+                    this.state.imgCode
+                  }`
                 }}
                 style={{
                   width: 80,
@@ -140,7 +141,7 @@ export default class MsgCodeModal extends React.Component {
                   }
                 ]}
                 onPress={() => {
-                  this.props.setModalVisible(false, true)
+                  this.props.setModalVisible(false)
                 }}
               >
                 <Text style={styles.btnText}>取消</Text>

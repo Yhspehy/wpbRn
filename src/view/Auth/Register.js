@@ -11,6 +11,7 @@ import {
 import { SafeAreaView } from 'react-navigation'
 
 import MsgCodeModal from './MsgCodeModal'
+import Toast from '../../utils/toast'
 export default class Register extends React.Component {
   static navigationOptions = {
     title: '免费注册',
@@ -31,6 +32,7 @@ export default class Register extends React.Component {
       msgCodeText: '获取验证码',
       msgCodeSecond: 10
     }
+    this.myRef = React.createRef()
   }
 
   componentWillUnmount() {
@@ -46,6 +48,7 @@ export default class Register extends React.Component {
           modalVisible: visible,
           btnDisabled: true
         })
+        this.myRef.current.show('验证码已发送!')
         this.tick()
       }
     }
@@ -156,6 +159,8 @@ export default class Register extends React.Component {
             this.setModalVisible(visible, btnDisabled)
           }
         />
+
+        <Toast ref={this.myRef} />
       </SafeAreaView>
     )
   }
