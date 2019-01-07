@@ -2,10 +2,6 @@ import React from 'react'
 import { StyleSheet, View, Animated, Dimensions, Text } from 'react-native'
 
 import PropTypes from 'prop-types'
-export const DURATION = {
-  LENGTH_SHORT: 500,
-  FOREVER: 0
-}
 
 const { height } = Dimensions.get('window')
 
@@ -23,10 +19,7 @@ export default class Toast extends React.Component {
     this.timer && clearTimeout(this.timer)
   }
 
-  show(textWord, duration, callback) {
-    this.duration =
-      typeof duration === 'number' ? duration : DURATION.LENGTH_SHORT
-    this.callback = callback
+  show(textWord, delayTime = 500, callback) {
     this.setState({
       isShow: true,
       text: textWord
@@ -37,14 +30,12 @@ export default class Toast extends React.Component {
       duration: this.props.fadeInDuration
     }).start(() => {
       this.isShow = true
-      if (duration !== DURATION.FOREVER) this.close()
+      if (delayTime > 0) this.close(delayTime, callback)
     })
   }
 
-  close(duration) {
-    let delay = duration ? this.duration : duration
-
-    if (delay === DURATION.FOREVER) delay = this.props.defaultCloseDelay || 250
+  close(delayTime, callback) {
+    const delay = delayTime ? delayTime : 250
 
     if (!this.isShow && !this.state.isShow) return
     this.timer && clearTimeout(this.timer)
@@ -57,8 +48,8 @@ export default class Toast extends React.Component {
           isShow: false
         })
         this.isShow = false
-        if (typeof this.callback === 'function') {
-          this.callback()
+        if (typeof callback === 'function') {
+          callback()
         }
       })
     }, delay)
