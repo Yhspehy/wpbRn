@@ -53,3 +53,13 @@ export function checkImgCode(data) {
     body: data
   })
 }
+
+/**
+ * 注册
+ */
+export function register(data) {
+  return Fetch('/InfoUser/Register', {
+    method: 'POST',
+    body: data
+  })
+}

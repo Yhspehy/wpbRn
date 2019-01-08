@@ -12,6 +12,7 @@ import { SafeAreaView } from 'react-navigation'
 
 import MsgCodeModal from './MsgCodeModal'
 import Toast from '../../utils/toast'
+
 export default class Register extends React.Component {
   static navigationOptions = {
     title: '免费注册',
@@ -129,7 +130,10 @@ export default class Register extends React.Component {
 
         <TouchableHighlight
           onPress={() => {
-            this.props.navigation.navigate('RegisterComfirm')
+            this.props.navigation.navigate('RegisterComfirm', {
+              mobile: this.state.mobile,
+              msgCode: this.state.msgCode
+            })
           }}
           style={[
             styles.btn,

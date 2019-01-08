@@ -65,6 +65,6 @@ export default createStackNavigator(
     }
   },
   {
-    initialRouteName: 'Register'
+    initialRouteName: 'RegisterComfirm'
   }
 )

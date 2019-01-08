@@ -5,9 +5,14 @@ import {
   View,
   Text,
   TextInput,
-  TouchableHighlight
+  TouchableHighlight,
+  Platform
 } from 'react-native'
 import { StackActions, NavigationActions, SafeAreaView } from 'react-navigation'
+import Toast from '../../utils/toast'
+import CheckBox from './CheckBox'
+import { register } from '../../utils/user'
+import { cmdId } from '../../config/config'
 
 export default class Verify extends React.Component {
   static navigationOptions = {
@@ -21,9 +26,41 @@ export default class Verify extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      name: '',
-      idCard: ''
+      nickname: '',
+      password: '',
+      comfirm: '',
+      isChecked: false
     }
+    this.myRef = React.createRef()
+  }
+
+  _register = () => {
+    if (!this.state.nickname || !this.state.password || this.state.comfirm) {
+      this.myRef.current.show('请完善内容')
+      return
+    }
+    if (this.state.password !== this.state.comfirm) {
+      this.myRef.current.show('两次输入的密码不一致')
+      return
+    }
+    const platform = Platform.os === 'ios' ? 1 : 2
+    const { navigation } = this.props
+    const _mobile = navigation.getParam('mobile', '')
+    const msgCode = navigation.getParam('msgCode', '')
+    const body = JSON.stringify({
+      mobile: _mobile,
+      code: msgCode,
+      nick_name: this.state.nickname,
+      password: this.state.password,
+      plat_form: platform,
+      ref_id: '', // 邀请人id
+      client_id: '', // 设备号
+      cmp_id: cmdId
+    })
+
+    register(body).then(res => {
+      console.log(res)
+    })
   }
 
   render() {
@@ -38,8 +75,8 @@ export default class Verify extends React.Component {
           <TextInput
             style={styles.input}
             placeholder="请输入昵称"
-            onChangeText={text => this.setState({ name: text })}
-            value={this.state.name}
+            onChangeText={text => this.setState({ nickname: text })}
+            value={this.state.nickname}
             underlineColorAndroid="transparent"
           />
         </View>
@@ -48,8 +85,8 @@ export default class Verify extends React.Component {
           <TextInput
             style={styles.input}
             placeholder="请输入登录密码"
-            onChangeText={text => this.setState({ idCard: text })}
-            value={this.state.idCard}
+            onChangeText={text => this.setState({ password: text })}
+            value={this.state.password}
             underlineColorAndroid="transparent"
           />
         </View>
@@ -58,15 +95,43 @@ export default class Verify extends React.Component {
           <TextInput
             style={styles.input}
             placeholder="请确认您的登录密码"
-            onChangeText={text => this.setState({ idCard: text })}
-            value={this.state.idCard}
+            onChangeText={text => this.setState({ comfirm: text })}
+            value={this.state.comfirm}
             underlineColorAndroid="transparent"
           />
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            padding: 10
+          }}
+        >
+          <CheckBox
+            style={{ marginRight: 10, marginLeft: 10 }}
+            onClick={() => {
+              this.setState({
+                isChecked: !this.state.isChecked
+              })
+            }}
+            isChecked={this.state.isChecked}
+          />
+          <Text
+            style={{
+              color: '#212121',
+              fontSize: 12
+            }}
+          >
+            我已阅读并同意
+            <Text style={styles.blueText}>国际原油宝服务协议 </Text>及
+            <Text style={styles.blueText}> 隐私政策 </Text>
+          </Text>
         </View>
 
         <TouchableHighlight
           onPress={() => {
-            this.props.navigation.dispatch(resetAction)
+            this._register()
+            // this.props.navigation.dispatch(resetAction)
           }}
           style={[
             styles.btn,
@@ -82,6 +147,8 @@ export default class Verify extends React.Component {
             立即注册
           </Text>
         </TouchableHighlight>
+
+        <Toast ref={this.myRef} />
       </SafeAreaView>
     )
   }
@@ -125,5 +192,8 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  blueText: {
+    color: '#249fed'
   }
 })
